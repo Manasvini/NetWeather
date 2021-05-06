@@ -46,40 +46,11 @@ public class BandwidthClient {
         annotationName = "bandwidth";
         this.context = context;
         this.cb = cb;
-        readRoutes();
+        
 
     }
 
-    private void readRoutes(){
-        try{
-            InputStream is = context.getResources().openRawResource(R.raw.stall_routes);
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            String json = new String(buffer, "UTF-8");
-            JSONArray jsonArray = new JSONArray(json);
-            Log.i(TAG, "got " + jsonArray.length() + " routes");
-            for(int i = 0; i < jsonArray.length(); ++i){
-                List<LocationBandwidthInfo> routeInfo = new ArrayList<>();
-                for(int j = 0; j < jsonArray.getJSONArray(i).length(); ++j){
-                    JSONObject object = jsonArray.getJSONArray(i).getJSONObject(j);
-                    LocationBandwidthInfo info = new LocationBandwidthInfo();
-                    LatLong latLong= new LatLong();
-                    latLong.setLatitude(object.getDouble("y"));
-                    latLong.setLongitude(object.getDouble("x"));
-                    //Log.i(TAG,"i =" + i + " +j = " + j + "bw = " + object.getDouble("bandwidth"));
-                    info.setLatLong(latLong);
-                    info.setBandwidth(object.getDouble("bandwidth"));
-                    routeInfo.add(info);
 
-                }
-                routes.add(routeInfo);
-            }
-        } catch(Exception ex){
-            ex.printStackTrace();
-        }
-    }
 
     class LocationJsonRequest implements Response.Listener<JSONObject>{
 
